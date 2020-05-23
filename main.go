@@ -31,7 +31,7 @@ func main() {
 		if len(telephone) != 11 {
 			c.JSON(http.StatusUnprocessableEntity, map[string]interface{}{ //gin.H
 				"code": 442,
-				"msg":  "手机号错误,手机号必须为11位",
+				"msg":  "手机号错误,手机号必须为11位!",
 			})
 			return
 		}
@@ -51,7 +51,7 @@ func main() {
 		if isTelephoneExist(db, telephone) {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{
 				"code": 442,
-				"msg":  "用户已存在",
+				"msg":  "用户已存在!",
 			})
 			return
 		}
