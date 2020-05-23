@@ -39,7 +39,7 @@ func main() {
 		if len(password) < 6 {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{
 				"code": 442,
-				"msg":  "手机号错误,手机号必须为11位",
+				"msg":  "密码至少为6位!",
 			})
 			return
 		}
@@ -66,7 +66,8 @@ func main() {
 		log.Println(name, telephone, password)
 
 		c.JSON(200, gin.H{
-			"msg": "注册成功!",
+			"code": 200,
+			"msg":  "注册成功!",
 		})
 	})
 	_ = r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
