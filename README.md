@@ -1,9 +1,5 @@
 # Gin api项目
 
-## 目标
-本项目主要用于练习Golang的web开发
-
-
 ## 开始
 本项目主要使用到的技术栈有
 - Gin - Golang编写的web框架
