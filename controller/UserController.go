@@ -16,9 +16,16 @@ import (
 func Register(c *gin.Context) {
 	DB := common.GetDB()
 
-	name := c.PostForm("name")
-	telephone := c.PostForm("telephone")
-	password := c.PostForm("password")
+	// map 方法
+	//var requestMap  = make(map[string]string)
+	//json.NewDecoder(c.Request.Body).Decode(&requestMap)
+
+	var requestUser = model.User{}
+	_ = c.Bind(&requestUser)
+
+	name := requestUser.Name
+	telephone := requestUser.Telephone
+	password := requestUser.Password
 
 	if len(telephone) != 11 {
 		response.Response(c, http.StatusUnprocessableEntity, 442, nil, "手机号错误,手机号必须为11位!")
@@ -52,17 +59,26 @@ func Register(c *gin.Context) {
 		Password:  string(hashedPassword),
 	}
 	DB.Create(&newUser)
+	token, err := common.ReleaseToken(newUser)
+	if err != nil {
+		response.Response(c, http.StatusInternalServerError, 500, nil, "系统异常!")
+		log.Printf("token generate error: %v", err)
+		return
+	}
 
 	log.Println(name, telephone, password)
 
-	response.Success(c, nil, "注册成功!")
+	response.Success(c, gin.H{"token": token}, "注册成功!")
 }
 
 func Login(c *gin.Context) {
 	DB := common.GetDB()
 
-	telephone := c.PostForm("telephone")
-	password := c.PostForm("password")
+	var requestUser = model.User{}
+	_ = c.Bind(&requestUser)
+
+	telephone := requestUser.Telephone
+	password := requestUser.Password
 	if len(telephone) != 11 {
 		response.Response(c, http.StatusUnprocessableEntity, 442, nil, "手机号错误,手机号必须为11位!")
 		return
